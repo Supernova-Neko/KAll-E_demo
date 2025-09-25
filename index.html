@@ -28,7 +28,7 @@
 	<div class="text-center">
 	<h2>KALL-E: </h2>
       <h3>Autoregressive Speech Synthesis with Next-Distribution Prediction</h3>
-        <p> Kangxiang Xia <sup>1</sup><sup>*</sup>, Xinfa Zhu<sup>1</sup><sup>*</sup>, Jixun Yao <sup>1</sup>, Wenjie Tian <sup>1</sup>, Wenhao Li <sup>1</sup>, Lei Xie<sup>1</sup></p>
+        <p> Kangxiang Xia <sup>1</sup><sup>*</sup>, Xinfa Zhu<sup>1</sup><sup>*</sup>, Jixun Yao <sup>1</sup>, Wenjie Tian <sup>1</sup>, Wenhao Li <sup>1</sup>, Lei Xie<sup>1</sup>&#10003;</p>
         <p><sup>1</sup>Audio, Speech and Language Processing Group (ASLP@NPU)<br>
 		Northwestern Polytechnical University, Xi'an<br>
         xkx@mail.nwpu.edu.cn, lxie@nwpu.edu.cn</p>
@@ -38,7 +38,7 @@
             <a href="https://github.com/xkx-hub/KALL-E">GitHub Repo</a>
         </p>
 	</div>
-	<p><b>Abstract</b> We introduce KALL-E, a novel autoregressive (AR) language model for text-to-speech (TTS) synthesis that operates by predicting the next distribution of continuous speech frames. Unlike existing methods, KALL-E directly models the continuous speech distribution conditioned on text, eliminating the need for any diffusion-based components. Specifically, we utilize a Flow-VAE to extract a continuous latent speech representation from waveforms, instead of relying on discrete speech tokens. A single AR Transformer is then trained to predict these continuous speech distributions from text, optimizing a Kullback–Leibler divergence loss as its objective. Experimental results demonstrate that KALL-E achieves superior speech synthesis quality and can even adapt to a target speaker from just a single sample. Importantly, KALL-E provides a more direct and effective approach for utilizing continuous speech representations in TTS.
+	<p style="text-align: justify;"><b>Abstract</b> We introduce KALL-E, a novel autoregressive (AR) language model for text-to-speech (TTS) synthesis that operates by predicting the next distribution of continuous speech frames. Unlike existing methods, KALL-E directly models the continuous speech distribution conditioned on text, eliminating the need for any diffusion-based components. Specifically, we utilize a Flow-VAE to extract a continuous latent speech representation from waveforms, instead of relying on discrete speech tokens. A single AR Transformer is then trained to predict these continuous speech distributions from text, optimizing a Kullback–Leibler divergence loss as its objective. Experimental results demonstrate that KALL-E achieves superior speech synthesis quality and can even adapt to a target speaker from just a single sample. Importantly, KALL-E provides a more direct and effective approach for utilizing continuous speech representations in TTS.
 	</p>
 
 	<p>
@@ -47,13 +47,8 @@
         <li><a href="#model-overview">System Overview</a></li>
         <li><a href="#Voice cloning display">Voice cloning</a></li>
 		<li><a href="#Context Awareness display">Context Awareness</a></li>
-        <li><a href="#emotion-samples">Emotion Samples</a></li>
-		<li><a href="#style-imitation-samples">Speech Style Imitation</a></li>
-        <li><a href="#tempo-samples">Speech Tempo Controllability</a></li>
-		<li><a href="#robustness-samples">Robustness</a></li>
-		<li><a href="#editing-samples">Speech Editing</a></li>
-		<li><a href="#vc-samples">Voice Conversion</a></li>
-		<li><a href="#video-translation-samples">Cross-language Video Translation</a></li>
+        <li><a href="#Unconditional Voice sampling display">Unconditional Voice sampling</a></li>
+		<li><a href="#Test Time Training display">Test Time Training</a></li>
       </ul>
 	</p>
 
@@ -108,72 +103,108 @@
 
 <div class="container pt-5 mt-5 shadow-lg p-5 mb-5 bg-white rounded">
 	<h2 id="Context Awareness display" style="text-align: center;">Context Awareness</h2>
-	<p>MaskGCT can mimic the voices of celebrities or characters from animated shows. We present these examples for purely research purposes.</p>
+	<p><strong>Simply providing the target text (No Audio Prompt Required),</strong> KALL-E can autonomously interpret the content, whether it’s conversational dialogue, poetry, an audiobook, or a news broadcast, and render it in the most suitable synthesis style.</p>
 		<div class="table-responsive pt-3">
 			<table class="table table-hover pt-2">
 				<thead>
 				<tr>
-				<th style="text-align: center">Celeb</th>
-				<th style="text-align: center">Prompt</th>
-				<th style="text-align: center">Generated</th>
+				<th style="text-align: center">Target Text</th>
+				<th style="text-align: center">Generated Audio</th>
 				</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td style="vertical-align : middle;text-align:center;">Donald Trump</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/celeb_samples/trump_0.wav" autoplay/>Your browser does not support the audio element.</audio><br>In short, we embarked on a mission to make America great again, for all Americans.</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/celeb_samples/trump_1.wav" autoplay/>Your browser does not support the audio element.</audio><br>But to those who knew her well, it was a symbol of her unwavering determination and spirit.</td>
+						<td style="vertical-align : middle;text-align:center;">哎? 说到有声书，大家听了我们实验室的语音作品之后，呃都会觉得，嗯音色效果非常逼真，甚至还有呼吸声，哇塞，真的感觉就像真人在说话</td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/context_awareness/context_aware-conversation.wav" autoplay/>Your browser does not support the audio element.</audio></td>
 					</tr>
 					<tr>
-						<td style="vertical-align : middle;text-align:center;">Benedict Cumberbatch</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/celeb_samples/Ben_0.wav" autoplay/>Your browser does not support the audio element.</audio><br>So maybe, that you would prefer to forgo my secret rather than consent to becoming a prisoner here for what might be several days.</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/celeb_samples/Ben_1.wav" autoplay/>Your browser does not support the audio element.</audio><br>However, if you choose to stay, know that the truth I unveil may forever alter the course of your journey.</td>
+						<td style="vertical-align : middle;text-align:center;">帘外雨潺潺，春意阑珊。罗衾不耐五更寒。梦里不知身是客，一晌贪欢。独自莫凭栏，无限江山。别时容易见时难。流水落花春去也，天上人间。</td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/context_awareness/context_aware-poetry.wav" autoplay/>Your browser does not support the audio element.</audio></td>
 					</tr>
 					<tr>
-						<td style="vertical-align : middle;text-align:center;">周杰伦 (Jay Chou)</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/celeb_samples/jay_0.wav" autoplay/>Your browser does not support the audio element.</audio><br>对我来讲是一种荣幸但是也是压力蛮大的，不过我觉得是一种，呃，很好的一个挑战。</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/celeb_samples/jay_1.wav" autoplay/>Your browser does not support the audio element.</audio><br>我觉得这种运动其实不是说靠机会的，我觉得对每个人来讲，像我们歌手来讲，我觉得其实都是你要自己去努力，然后才可以达到自己的梦想。</td>
+						<td style="vertical-align : middle;text-align:center;">大青马的步伐似乎也不那么镇定了。陈阵的双腿和马身都在发抖，并迅速发生可怕的共振，继而传染放大了人马共同的恐惧。大青马的耳朵背向身后，紧张关注着那条探子狼。</td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/context_awareness/context_aware-audiobook.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+
 					</tr>
 					<tr>
-						<td style="vertical-align : middle;text-align:center;">丁真 (Zhen Ding)</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/celeb_samples/dingzhen_0.wav" autoplay/>Your browser does not support the audio element.</audio><br>今天我很荣幸作为一个青藏高原的孩子，能来到联合国。</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/celeb_samples/dingzhen_1.wav" autoplay/>Your browser does not support the audio element.</audio><br>我希望大家能来到我的家乡的大自然中学习，让我的野生动物朋友们来教会你们。</td>
+						<td style="vertical-align : middle;text-align:center;">今年以来，特朗普政府进一步加大针对赴美签证申请者的审查力度，并限制多国公民入境。</td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/context_awareness/context_aware-news_broadcst.wav" autoplay/>Your browser does not support the audio element.</audio></td>
 					</tr>
 					<tr>
 					</tr>
 				</tbody>
 			</table>
+			<p style="text-align: center; font-weight: bold; margin-top: 20px;">
+				KALL-E can synthesize audio with corresponding <strong>emotions</strong> based solely on input text.
+			</p>
 			<div class="table-responsive pt-3">
 				<table class="table table-hover pt-2">
 					<thead>
 					<tr>
-					<th style="text-align: center">Anime</th>
-					<th style="text-align: center">Prompt</th>
-					<th style="text-align: center">Generated</th>
+					<th style="text-align: center">Target Text</th>
+					<th style="text-align: center">Generated Audio</th>
 					</tr>
 					</thead>
 					<tbody>
 						<tr>
-							<td style="vertical-align : middle;text-align:center;">Rick (from Rick and Morty)</td>
-							<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/celeb_samples/rick_0.wav" autoplay/>Your browser does not support the audio element.</audio><br>Yeah, that's the difference between you and me morty. I never go back to the carpet store.</td>
-							<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/celeb_samples/rick_1.wav" autoplay/>Your browser does not support the audio element.</audio><br>Then I would never talk to that person about boa constrictors, or primeval forests, or stars. I would bring myself down to his level.</td>
+							<td style="vertical-align : middle;text-align:center;">你知道吗，和你在一起的每一天都充满<strong>快乐</strong>。</td>
+							<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/context_awareness/context_aware_zh_happy.wav" autoplay/>Your browser does not support the audio element.</audio></td>
 						</tr>
 						<tr>	
-							<td style="vertical-align : middle;text-align:center;">Morty (from Rick and Morty)</td>
-							<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/celeb_samples/morty_0.wav" autoplay/>Your browser does not support the audio element.</audio><br>I'm being serious. Ok?</td>
-							<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/celeb_samples/morty_1.wav" autoplay/>Your browser does not support the audio element.</audio><br>In what a disgraceful light might it not strike so vain a man!</td>
+							<td style="vertical-align : middle;text-align:center;">你知道吗，和你在一起的每一天都充满<strong>愤怒</strong>。</td>
+							<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/context_awareness/context_aware_zh_anger.wav" autoplay/>Your browser does not support the audio element.</audio></td>
 						</tr>
 						<tr>	
-							<td style="vertical-align : middle;text-align:center;">后羿 (Houyi)</td>
-							<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/celeb_samples/houyi_0.wav" autoplay/>Your browser does not support the audio element.</audio><br>周日被我射熄火了，所以今天是周一。</td>
-							<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/celeb_samples/houyi_1.wav" autoplay/>Your browser does not support the audio element.</audio><br>有一种撕心裂肺的感觉，是辣椒，我加了辣椒！</td>
+							<td style="vertical-align : middle;text-align:center;">你知道吗，和你在一起的每一天都充满<strong>悲伤</strong>。</td>
+							<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/context_awareness/context_aware_zh_sad.wav" autoplay/>Your browser does not support the audio element.</audio></td>
 						</tr>
 						<tr>	
-							<td style="vertical-align : middle;text-align:center;">八重神子 (Yae Miko)</td>
-							<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/celeb_samples/yae_0.wav" autoplay/>Your browser does not support the audio element.</audio><br>今夜的月光如此清亮，不做些什么真是浪费。随我一同去月下漫步吧，不许拒绝。</td>
-							<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/celeb_samples/yae_1.wav" autoplay/>Your browser does not support the audio element.</audio><br>梯度是一个多变量微积分中的概念，用于描述一个标量场在某一点处的最大变化率，以及变化最快的方向。在物理学中，梯度通常用来表示某个物理量的空间变化情况，例如温度或压力。</td>
+							<td style="vertical-align : middle;text-align:center;">Every day with you is <strong>full of joy</strong>.</td>
+							<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/context_awareness/context_aware_en_happy.wav" autoplay/>Your browser does not support the audio element.</audio></td>
 						</tr>
 						<tr>
+							<td style="vertical-align : middle;text-align:center;">Every day with you is <strong>filled with sadness</strong>.</td>
+							<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/context_awareness/context_aware_en_sad.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						</tr>
+						<tr>
+							<td style="vertical-align : middle;text-align:center;">Every day with you is <strong>filled with anger</strong>.</td>
+							<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/context_awareness/context_aware_en_anger.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="table-responsive pt-3">
+				<table class="table table-hover pt-2">
+					<thead>
+					<tr>
+					<th style="text-align: center">Target Text</th>
+					<th style="text-align: center">Generated Audio</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="vertical-align : middle;text-align:center;">哈哈哈哈，你今天的造型真搞笑。</strong>。</td>
+							<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/context_awareness/context_aware-1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						</tr>
+						<tr>	
+							<td style="vertical-align : middle;text-align:center;">啊？这消息来的也太突然了，我完全没准备。</td>
+							<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/context_awareness/context_aware-2.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						</tr>
+						<tr>	
+							<td style="vertical-align : middle;text-align:center;">嘿嘿，我刚刚偷吃了一块你的蛋糕。</td>
+							<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/context_awareness/context_aware-3.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						</tr>
+						<tr>	
+							<td style="vertical-align : middle;text-align:center;">独自一人，街灯拉长了我的影子，也拉长了孤独。</td>
+							<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/context_awareness/context_aware-4.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						</tr>
+						<tr>
+							<td style="vertical-align : middle;text-align:center;">阿嚏，昨天太冷了，我有点感冒了。</td>
+							<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/context_awareness/context_aware-5.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						</tr>
+						<tr>
+							<td style="vertical-align : middle;text-align:center;">天真的太黑了，我很害怕一个人待在家里。</td>
+							<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/context_awareness/context_aware-6.wav" autoplay/>Your browser does not support the audio element.</audio></td>
 						</tr>
 					</tbody>
 				</table>
@@ -183,304 +214,39 @@
 
 
 <div class="container pt-5 mt-5 shadow-lg p-5 mb-5 bg-white rounded">
-	<h2 id="emotion-samples" style="text-align: center;">Emotion Samples</h2>
-	<p>MaskGCT can learn the prosody, style, and emotion of prompt speech.</p>
+	<h2 id="Unconditional Voice sampling display" style="text-align: center;">Unconditional Voice samplings</h2>
+	<p>Given text, KALL-E can generate a variety of voices.</p>
 		<div class="table-responsive pt-3">
 			<table class="table table-hover pt-2">
 				<thead>
 				<tr>
-				<th style="text-align: center">Emotion</th>
-				<th style="text-align: center">Text</th>
-				<th style="text-align: center">Generated</th>
-				</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td style="vertical-align : middle;text-align:center; "rowspan="2">Angry</td>
-						<td style="vertical-align : middle;text-align:center;">Gosh, was I fucking wrong! Let me just tell you after living in LA, I was not comfortable there. Well, you know what? I'll get into it in a minute. But, I think the reason why I said that was.</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/angry_0.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;">你以为这只是小事一桩？你错了！每一次你的冷漠和无视，都像是在我心上划下一道道深深的伤口！</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/angry_1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-
-					<tr>
-						<td style="vertical-align : middle;text-align:center; "rowspan="2">Disguested</td>
-						<td style="vertical-align : middle;text-align:center;">Later recounting that quote, it melted in my mouth like raw tuna in a sushi restaurant. I fucking hate this guy. Just so despicable, so, so disgusting.</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/disguested_0.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;">每当我回想起那些空洞的言辞和虚假的笑容，就感到厌恶和无力。这种被背叛的感觉，就像是吞下了一只苍蝇，让人反胃，却又吐不出来。</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/disguested_1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-
-					<tr>
-						<td style="vertical-align : middle;text-align:center; "rowspan="2">Fearful</td>
-						<td style="vertical-align : middle;text-align:center;">But Astrid wouldn't abandon her quest. As they traversed the dense forest, Astrid could start to discern eerie whispers emanating from the shadows. She hastened her pace, her pulse racing with apprehension, she darted across the underbrush and stumbled over the roots.</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/fear_0.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;">这种压力不仅仅来自外部，更深层次的是自我期望的压迫。我渴望在职业道路上不断前进，但每一步都显得如此艰难。内心的焦虑和不安，让我在夜深人静时难以入眠，脑海中不断回放着白天的种种挑战和失误。</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/fear_1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-
-					<tr>
-						<td style="vertical-align : middle;text-align:center; "rowspan="2">Happy</td>
-						<td style="vertical-align : middle;text-align:center;">Would you guys personally like to have a fake fireplace, an electric one, in your house? Or would you rather have a real fireplace? Let me know down below. Okay everybody, that's all for today's video and I hope you guys learned a bunch of furniture vocabulary!</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/happy_0.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;">哇塞，真是太棒了！感觉就像中了大奖一样，心里那个美啊，简直没法形容。</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/happy_1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-
-					<tr>
-						<td style="vertical-align : middle;text-align:center; "rowspan="2">Sad</td>
-						<td style="vertical-align : middle;text-align:center;">I used to think that when you are sad, you will cry a lot. but it turns out that when you are really sad, you can't even shed a single tear. This world is so imperfect that if you want something, you have to give up something.</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/sad_0.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;">这次考试真的太难了，我，我每一道题都不知道怎么写。</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/sad_1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-
-					<tr>
-						<td style="vertical-align : middle;text-align:center; "rowspan="2">Surprised</td>
-						<td style="vertical-align : middle;text-align:center;">Guess what I saw in the park next to school last night? A very long python! I kind of want to check it out again tonight.</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/surprised_0.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;">天呐，你看了昨晚的比赛吗，真的是太精彩太刺激了，我激动的一晚上没睡着。</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/surprised_1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<p>MaskGCT enables emotion control for zero-shot in-context learning through post-training.</p>
-		<br>
-		<div class="table-responsive pt-3">
-			<table class="table table-hover pt-2">
-				<thead>
-				<tr>
-				<th style="text-align: center">Prompt</th>
-				<th style="text-align: center">neutral</th>
-				<th style="text-align: center">Angry</th>
-				<th style="text-align: center">Happy </th>
-				<th style="text-align: center">Sad</th>
-				<th style="text-align: center">Surprise</th>
-				</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/ft/1/prompt.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/ft/1/neutral.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/ft/1/angry.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/ft/1/happy.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/ft/1/sad.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/ft/1/surprise.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/ft/2/prompt.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/ft/2/neutral.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/ft/2/angry.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/ft/2/happy.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/ft/2/sad.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/emotion_samples/ft/2/surprise.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-			</tbody>
-		</table>
-	</div>
-</div>
-
-<div class="container pt-5 mt-5 shadow-lg p-5 mb-5 bg-white rounded">
-	<h2 id="style-imitation-samples" style="text-align: center;">Speech Style Imitation</h2>
-	<p>MaskGCT can learn <i>how to speak</i> including style such as emotion and accent, from prompt speech.</p>
-		<div class="table-responsive pt-3">
-			<table class="table table-hover pt-2">
-				<thead>
-				<tr>
-				<th style="text-align: center">Prompt</th>
-				<th style="text-align: center">Generated</th>
-				</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/style_samples/prompt/ABA_a0055.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/style_samples/gen/ABA_a0055-ABA_a0547.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/style_samples/prompt/ABA_a0055.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/style_samples/gen/ABA_a0055-ABA_a0547.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/style_samples/prompt/ASI_a0219.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/style_samples/gen/ASI_a0219-ASI_b0458.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/style_samples/prompt/BWC_a0152.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/style_samples/gen/BWC_a0152-BWC_a0439.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/style_samples/prompt/HJK_a0249.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/style_samples/gen/HJK_a0249-HJK_b0029.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/style_samples/prompt/NJS_a0186.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/style_samples/gen/NJS_a0186-NJS_a0250.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/style_samples/prompt/0011_001655.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/style_samples/gen/0011_001655-0011_001708.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/style_samples/prompt/0019_000890.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/style_samples/gen/0019_000890-0019_000993.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/style_samples/prompt/0020_001305.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/style_samples/gen/0020_001305-0020_001308.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
-</div>
-
-<div class="container pt-5 mt-5 shadow-lg p-5 mb-5 bg-white rounded">
-	<h2 id="tempo-samples" style="text-align: center;">Speech Tempo Controllability</h2>
-	<p>MaskGCT has the capability to control the total duration of the generated audio, thereby allowing us to regulate the tempo of the generated speech within a reasonable range.</p>
-		<div class="table-responsive pt-3">
-			<table class="table table-hover pt-2">
-				<thead>
-				<tr>
-				<th style="text-align: center">Prompt</th>
-				<th style="text-align: center">0.6x Duration</th>
-				<th style="text-align: center">0.8x Duration</th>
-				<th style="text-align: center">Origin Duration</th>
-				<th style="text-align: center">1.2x Duration</th>
-				</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/tempo_samples/tempo_10.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/tempo_samples/tempo_11.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/tempo_samples/tempo_12.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/tempo_samples/tempo_13.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/tempo_samples/tempo_14.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/tempo_samples/tempo_20.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/tempo_samples/tempo_21.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/tempo_samples/tempo_22.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/tempo_samples/tempo_23.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/tempo_samples/tempo_24.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/tempo_samples/tempo_00.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/tempo_samples/tempo_01.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/tempo_samples/tempo_02.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/tempo_samples/tempo_03.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/tempo_samples/tempo_04.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/tempo_samples/tempo_40.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/tempo_samples/tempo_41.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/tempo_samples/tempo_42.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/tempo_samples/tempo_43.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/tempo_samples/tempo_44.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-</div>
-
-<div class="container pt-5 mt-5 shadow-lg p-5 mb-5 bg-white rounded">
-	<h2 id="robustness-samples" style="text-align: center;">Robustness</h2>
-	<p>Compared to AR models, MaskGCT exhibits greater robustness (lower WER), demonstrating enhanced stability in some challenging cases (such as tongue twisters and other samples where AR models are prone to hallucinations).</p>
-		<div class="table-responsive pt-3">
-			<table class="table table-hover pt-2">
-				<thead>
-				<tr>
-				<th style="text-align: center">Text</th>
-				<th style="text-align: center">MaskGCT</th>
-				<th style="text-align: center">AR</th>
-				</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;">The great Greek grape growers grow great Greek grapes one one one.</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/robustness_samples/maskgct/common_voice_en_21851999-common_voice_en_21851998.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/robustness_samples/ar/common_voice_en_21851999-common_voice_en_21851998.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;">I thought a thought. But the thought I thought wasn't the thought I thought I thought. If the thought I thought I thought had been the thought I thought, I wouldn't have thought so much.</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/robustness_samples/maskgct/common_voice_en_599060-common_voice_en_599063.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/robustness_samples/ar/common_voice_en_599060-common_voice_en_599063.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;">Whether the weather be fine or whether the weather be not, whether the weather be cold or whether the weather be hot. Well weather the weather whether we like it or not.</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/robustness_samples/maskgct/common_voice_en_20461046-common_voice_en_20461051.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/robustness_samples/ar/common_voice_en_20461046-common_voice_en_20461051.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;">针蓝线蓝领子蓝，蓝针蓝线蓝领蓝。蓝针蓝线连蓝领，针蓝线蓝领子蓝。</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/robustness_samples/maskgct/raokouling-0097.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/robustness_samples/ar/raokouling-0097.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;">墙上画凤凰，凤凰画在粉红墙。红凤凰、粉凤凰，红粉凤凰、花凤凰。红凤凰，黄凤凰，红粉凤凰，粉红凤凰，花粉花凤凰。</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/robustness_samples/maskgct/raokouling-0025.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/robustness_samples/ar/raokouling-0025.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;">随后，民警还在店里发现一把锤子锤子锤子锤子锤子锤子。</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/robustness_samples/maskgct/00013265-00000622.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/robustness_samples/ar/00013265-00000622.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-						<td style="vertical-align : middle;text-align:center;">北京在出行规模规模规模规模规模，城市影响力方面方面方面方面方面表现优异优异优异优异优异。</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/robustness_samples/maskgct/10003502-00000044.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/robustness_samples/ar/10003502-00000044.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-					</tr>
-					<tr>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-</div>
-
-<div class="container pt-5 mt-5 shadow-lg p-5 mb-5 bg-white rounded">
-	<h2 id="editing-samples" style="text-align: center;">Speech Editing</h2>
-	<p>Based on the mask-and-predict mechanism, our text-to-semantic model supports zero-shot speech content editing with the assistance of a text-speech aligner. By using the aligner, we can identify the editing boundary of the original semantic token sequence, mask the portion that needs to be edited, and then predict the masked semantic tokens using the edited text and the unmasked semantic tokens.</p>
-		<div class="table-responsive pt-3">
-			<table class="table table-hover pt-2">
-				<thead>
-				<tr>
-				<th style="text-align: center">Source Text</th>
-				<th style="text-align: center">Source Speech</th>
 				<th style="text-align: center">Target Text</th>
-				<th style="text-align: center">Edited Speech</th>
+				<th style="text-align: center">Voice1</th>
+				<th style="text-align: center">Voice2</th>
 				</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td style="vertical-align : middle;text-align:center;">If the red of the second bow falls upon the green of the first, <b>the outcome is an abnormally wide yellow band in the bow</b>, since red and green light when mixed form yellow.</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/edit_samples/edited_p227_023.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;">If the red of the second bow falls upon the green of the first, <b>the result is to give a bow with an abnormally wide yellow band</b>, since red and green light when mixed form yellow.</td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/edit_samples/p227_023.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;">We introduce KALL-E, a novel autoregressive language model for text-to-speech synthesis that operates by predicting the next distribution of continuous speech frames.</td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/unconditional_voice_sampling/voice_1_1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/unconditional_voice_sampling/voice_1_2.wav" autoplay/>Your browser does not support the audio element.</audio></td>
 					</tr>
 					<tr>
-						<td style="vertical-align : middle;text-align:center;">The difference in the rainbow depends considerably upon the size of the drops, and the <b>colored band becomes wider as the size of the drops grows.</b></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/edit_samples/edited_p250_021.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;">The difference in the rainbow depends considerably upon the size of the drops, and the <b>width of the colored band increases as the size of the drops increases.</b></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/edit_samples/p250_021.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;">To simultaneously achieve high voice diversity and reproducibility, we introduce Speaker Voice Distribution Modeling.</td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/unconditional_voice_sampling/voice_2_1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/unconditional_voice_sampling/voice_2_2.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+					</tr>
+
+					<tr>
+						<td style="vertical-align : middle;text-align:center;">没错，嗯，我们觉得这项技术未来会在很多应用场景上有大用，比如说有声书啊，还有对话生成，嗯，都可以用上。</td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/unconditional_voice_sampling/voice_3_1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/unconditional_voice_sampling/voice_3_2.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="vertical-align : middle;text-align:center;">嗯，没错，AI 和艺术的结合，让每个人的声音都有机会被传递出去，这点还是挺有意思的。</td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/unconditional_voice_sampling/voice_4_1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/unconditional_voice_sampling/voice_4_2.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+					</tr>
 					</tr>
 				</tbody>
 			</table>
@@ -488,60 +254,51 @@
 </div>
 
 <div class="container pt-5 mt-5 shadow-lg p-5 mb-5 bg-white rounded">
-	<h2 id="vc-samples" style="text-align: center;">Voice Converison</h2>
-	<p>MaskGCT supports zero-shot voice conversion by fine-tuning the S2A (semantic-to-acoustic) model with a modified training strategy. We are still working on improving the effectiveness of voice conversion. The source and prompt samples are from the demo page of Seed-TTS. </p>
+	<h2 id="Test Time Training display" style="text-align: center;">Test Time Training</h2>
+	<p>To exploit this capacity at inference, KALL-E adopts  test-time training (TTT) procedure that adapts the language model to a new speaker from just one utterance. Given the prompt utterance, we employ the pretrained Flow-VAE to extract the distribution of the prompt speech. This distribution constitutes the supervision signal for TTT.</p>
 		<div class="table-responsive pt-3">
 			<table class="table table-hover pt-2">
 				<thead>
 				<tr>
-				<th style="text-align: center">Source</th>
-				<th style="text-align: center">Prompt</th>
-				<th style="text-align: center">Generated</th>
+				<th style="text-align: center">Prompt Audio And Text</th>
+				<th style="text-align: center">Target Text</th>
+				<th style="text-align: center">KALL-E</th>
+				<th style="text-align: center">KALL-E(TTT)</th>
 				</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/vc_samples/vc_00.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/vc_samples/vc_01.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/vc_samples/vc_02.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/test_time_training/TTT_prompt_1.wav" autoplay/></audio><br>有些事不管我们如何努力回不去就是回不去了有些事不管我们如何努力回不去就是回不去了。</td>
+						<td style="vertical-align : middle;text-align:center;">我本以为会好起来，但现实一次次把我推向深渊，那种绝望和无助的感觉，让我觉得自己快要崩溃了。</td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/test_time_training/kalle-1.wav" autoplay/></audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/test_time_training/kalle-ttt-1.wav" autoplay/></audio></td>
 					</tr>
 					<tr>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/vc_samples/vc_10.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/vc_samples/vc_11.wav" autoplay/>Your browser does not support the audio element.</audio></td>
-						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/vc_samples/vc_12.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/test_time_training/TTT_prompt_2.wav" autoplay/></audio><br>Hi everybody, Anaya thank you for that beautiful introduction I could not be prouder of everything you've done in your time with the Obama foundation.</td>
+						<td style="vertical-align : middle;text-align:center;">In the absence of confiscation the Portuguese Inquisitors were not earnest in tracing the heresies of ancestors or in following up the records of fugitives.</td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/test_time_training/kalle-2.wav" autoplay/></audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/test_time_training/kalle-ttt-2.wav" autoplay/></audio></td>
+					</tr>
+					<tr>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/test_time_training/TTT_prompt_3.wav" autoplay/></audio><br>对这就是我万人敬仰的太乙真人虽然有点婴儿肥但也掩不住我逼人的帅气。</td>
+						<td style="vertical-align : middle;text-align:center;">突然，身边一阵笑声。我看着他们，意气风发地挺直了胸膛，甩了甩那稍显肉感的双臂。</td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/test_time_training/kalle-3.wav" autoplay/></audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/test_time_training/kalle-ttt-3.wav" autoplay/></audio></td>
+					</tr>
+					<tr>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/test_time_training/TTT_prompt_4.wav" autoplay/></audio><br>I dropped out of Reed College after the first six months but then stayed around as a drop-in for another eighteen months or so before I really quit.</td>
+						<td style="vertical-align : middle;text-align:center;">The recipe calls for two cups of flour and one teaspoon of baking soda.</td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/test_time_training/kalle-4.wav" autoplay/></audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/test_time_training/kalle-ttt-4.wav" autoplay/></audio></td>
+					</tr>
 					</tr>
 				</tbody>
 			</table>
 		</div>
+	</div>
 </div>
 
-<div class="container pt-5 mt-5 shadow-lg p-5 mb-5 bg-white rounded">
-	<h2 id="video-translation-samples" style="text-align: center;">Cross-language Video Translation</h2>
-	<p>Some video translation samples just for fun.</p>
-		<div class="table-responsive pt-3">
-			<table class="table table-hover pt-2">
-				<td style="vertical-align : middle;text-align:center;">
-					<video width="454" height="246" controls>
-						<source src="audios/s2s/s2s_0.mp4" type="video/mp4">
-					</video>
-				</td>
-			</table>
-		</div>
-		<div class="table-responsive pt-3">
-			<table class="table table-hover pt-2">
-				<td style="vertical-align : middle;text-align:center;">
-					<video width="454" height="246" controls>
-						<source src="audios/s2s/BlackWukong_zh.mp4" type="video/mp4">
-					</video>
-				</td>
-				<td style="vertical-align : middle;text-align:center;">
-					<video width="454" height="246" controls>
-						<source src="audios/s2s/BlackWuKong_translated.mp4" type="video/mp4">
-					</video>
-				</td>
-			</table>
-		</div>
-</div>
+
 
 
 
